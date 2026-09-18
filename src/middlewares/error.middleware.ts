@@ -24,13 +24,13 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
-  
+  // Caso 1: erro "esperado", lançado por nós mesmos com "throw new AppError(...)".
   if (err instanceof AppError) {
     res.status(err.statusCode).json({ erro: err.message });
     return;
   }
 
-  
+  // Caso 2: erro conhecido do Prisma (ex.: violação de campo @unique).
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === 'P2002') {
       res.status(409).json({
@@ -44,6 +44,10 @@ export function errorHandler(
     }
   }
 
+  // Caso 3: qualquer erro inesperado (bug, falha de infraestrutura...).
+  // Registamos o erro completo no terminal do servidor (para depurar), mas
+  // NUNCA expomos err.message/err.stack ao cliente da API — isso vazaria
+  // detalhes internos que poderiam ajudar um atacante.
   console.error(err);
   res.status(500).json({ erro: 'Erro interno do servidor.' });
 }

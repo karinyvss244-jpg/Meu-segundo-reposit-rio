@@ -16,5 +16,64 @@ model Biblioteca_K {
 
   criadoEm DateTime @default(now())
 
+  emprestimos Emprestimo[]
+
   @@map("clientes")
+}
+
+model CategoriaObra {
+  id        Int     @id @default(autoincrement())
+  nome      String
+  descricao String?
+
+  obra Obra[]
+
+  @@map("categorias_obras")
+}
+
+model Obra {
+  id          Int @id @default(autoincrement())
+  categoriaId Int
+
+  anoPublicacao         Int?
+  isbn                  String?       @unique
+  categoria             CategoriaObra @relation(fields: [categoriaId], references: [id])
+  statusDisponibilidade String        @default("Disponivel")
+
+  emprestimos Emprestimo[]
+  manutencoes Manutencao[]
+
+  @@map("obras")
+}
+
+model Emprestimo {
+  id        Int @id @default(autoincrement())
+  clienteId Int
+  obraId    Int
+
+  cliente Biblioteca_K @relation(fields: [clienteId], references: [id])
+  obra    Obra         @relation(fields: [obraId], references: [id])
+
+  dataRetirada          DateTime  @default(now())
+  dataPrevistaDevolucao DateTime
+  dataDevolucaoReal     DateTime?
+
+  valorTotal Float
+
+  statusContrato String @default("Ativo")
+
+  @@map("emprestimo")
+}
+
+model Manutencao {
+  id     Int @id @default(autoincrement())
+  obraId Int
+
+  obra Obra @relation(fields: [obraId], references: [id])
+
+  descricaoServico String
+  dataManutencao   DateTime @default(now())
+  valorCusto       Float
+
+  @@map("manutencao")
 }
