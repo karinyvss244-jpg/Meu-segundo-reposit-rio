@@ -84,11 +84,11 @@ export const swaggerSpec = swaggerJSDoc({
                             enum: ['Disponivel', 'Emprestado', 'Manutencao'],
                             example: 'Disponivel',
                         },
-                        categoria: { $ref: '#/components/schemas/CategoriaObra' },
+                        categoria: { $ref: '#/components/schemas/Categoriaobra' },
                     },
                 },
 
-                Emprestado: {
+                Emprestimo: {
                     type: 'object',
                     properties: {
                         id: { type: 'integer', example: 1 },
@@ -107,7 +107,7 @@ export const swaggerSpec = swaggerJSDoc({
                     },
                 },
 
-                Manutencao: {
+                Manutenção: {
                     type: 'object',
                     properties: {
                         id: { type: 'integer', example: 1 },
