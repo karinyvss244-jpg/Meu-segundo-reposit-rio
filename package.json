@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio",
-    "seed": "tsx prisma db seed"
-  },
+"scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "postinstall": "prisma generate",
+  "vercel-build": "prisma generate && prisma migrate deploy",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev",
+  "prisma:studio": "prisma studio",
+  "seed": "prisma db seed"
+},                                                                        
   "keywords": [],
   "author": "",
   "license": "ISC",

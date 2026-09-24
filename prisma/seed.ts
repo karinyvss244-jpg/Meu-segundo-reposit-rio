@@ -5,6 +5,18 @@ import process from 'process';
 async function main() {
   console.log('Iniciando o seed da base de dados do Biblioteca_k...');
 
+ 
+  // ------------------------------------------------------------------
+  // Trava de segurança: se já existe alguma categoria cadastrada, o banco
+  // já foi populado antes. Sair aqui evita erro de chave duplicada (as
+  // placas dos veículos são @unique) caso este script rode duas vezes.
+  // ------------------------------------------------------------------
+  const categoriasExistentes = await prisma.categoriaObra.count();
+  if (categoriasExistentes > 0) {
+    console.log('Banco já populado anteriormente. Nada a fazer.');
+    return;
+  }
+
   const romance = await prisma.categoriaObra.create({
     data: { nome: 'romance', descricao: " Histórias centradas em relacionamentos, sentimentos e conflitos amorosos." }
   });
